@@ -1,0 +1,34 @@
+# Node.js dependencies
+/node_modules/
+
+# TypeScript build files
+/dist/
+/build/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+*.log.*
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+/.idea/
+/.vscode/
+
+# Coverage reports
+/coverage/
+
+# NPM package lock file (optional, if you're using yarn, leave this out)
+package-lock.json
+
+# TypeScript specific
+*.tsbuildinfo
+
+# MongoDB related (if you are storing local database files)
+*.bak
+*.dump

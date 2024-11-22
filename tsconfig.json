@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                    // Target ECMAScript version
+    "module": "commonjs",                   // Module system (commonjs for Node.js)
+    "rootDir": "./src",                     // Root directory of your source code
+    "outDir": "./dist",                     // Output directory for compiled code
+    "strict": true,                         // Enable strict type checking
+    "esModuleInterop": true,                // Required for importing CommonJS modules
+    "skipLibCheck": true,                   // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,              // Allow importing JSON modules
+    "baseUrl": ".",                         // Base directory for module resolution
+    "paths": {
+      "@api/*": ["src/api/*"],              // Path alias for API layer
+      "@application/*": ["src/application/*"],
+      "@domain/*": ["src/domain/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@config/*": ["src/config/*"],
+      "@utils/*": ["src/utils/*"]
+    },
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+  },
+  "include": [ "src/**/*", "src/types/**/*.d.ts"],
+  "exclude": ["node_modules"]
+}
