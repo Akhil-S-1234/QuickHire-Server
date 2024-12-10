@@ -7,6 +7,7 @@ export class User {
         public phoneNumber?: string,
         public password?: string,
         public profilePicture?: string,
+        public isBlocked?: Boolean,
         public createdAt : Date = new Date()
     ) {}
 }

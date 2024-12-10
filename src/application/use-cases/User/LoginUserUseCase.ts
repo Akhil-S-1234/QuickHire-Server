@@ -15,6 +15,10 @@ export class LoginUserUseCase {
             throw new Error('User not found')
         }
 
+        if(user.isBlocked){
+            throw new Error('User is restricted')
+        }
+
         const isPasswordValid = await this.authService.comparePassword(password, user.password ?? '');
         if (!isPasswordValid) {
             throw new Error('Invalid password');
@@ -48,6 +52,10 @@ export class LoginUserUseCase {
 
             await this.userRepository.save(newUser)
 
+        }
+
+        if(user && user.isBlocked){
+            throw new Error('User is restricted')
         }
 
         const accessToken = await this.authService.generateAccessToken({email: email})

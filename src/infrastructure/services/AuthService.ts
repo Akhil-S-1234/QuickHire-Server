@@ -88,10 +88,10 @@ export class AuthService {
       const decoded = await this.verifyRefreshToken(refreshToken);
 
       // Extract necessary data from decoded payload
-      const { email } = decoded;
+      const { email, role } = decoded;
 
       // Generate a new access token
-      return await this.generateAccessToken({ email });
+      return await this.generateAccessToken({ email, role });
     } catch (error: any) {
       throw new Error('Could not refresh access token: ' + error.message);
     }

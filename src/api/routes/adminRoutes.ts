@@ -14,6 +14,9 @@ import { ToggleBlockUseCase } from '../../application/use-cases/Admin/ToggleBloc
 
 import { AuthService } from '../../infrastructure/services/AuthService';
 
+import { verifyAccessToken } from '../middlewares/VerifyToken'
+
+
 const router = Router();
 
 // Set up dependency injection for the use case and controller
@@ -31,10 +34,12 @@ const adminAuthController = new AdminAuthController(checkAdminPassword, authServ
 const adminManageController = new AdminManageController(getAllUsersUseCase, toggleBlockUseCase)
 
 router.post('/login', adminAuthController.login);
+router.post('/logout', adminAuthController.logout);
 
-router.get('/users', adminManageController.getAllUsers)
-router.put('/users/:userId', adminManageController.toggleBlockUser)
-router.get('/recruiters', adminManageController.getAllRecruiters)
-router.put('/recruiters/:recruiterId', adminManageController.toggleBlockRecruiter)
+
+router.get('/users', verifyAccessToken, adminManageController.getAllUsers)
+router.put('/users/:userId', verifyAccessToken,adminManageController.toggleBlockUser)
+router.get('/recruiters', verifyAccessToken, adminManageController.getAllRecruiters)
+router.put('/recruiters/:recruiterId', verifyAccessToken,adminManageController.toggleBlockRecruiter)
 
 export default router;

@@ -6,6 +6,7 @@ import { RecruiterJobController } from '../controllers/RecruiterController/Recru
 
 import { MongoRecruiterRepository } from '../../infrastructure/respositories/MongoRecruiterRepository';
 import { MongoOtpRepository } from '../../infrastructure/respositories/MongoOtpRepository';
+import { MongoJobRepository } from '../../infrastructure/respositories/MongoJobRepository';
 
 import { RegisterRecruiterUseCase } from '../../application/use-cases/Recruiter/RegisterRecruiterUseCase';
 import { VerifyOtpRecruiterUseCase } from '../../application/use-cases/Recruiter/VerifyRecruiterUseCase';
@@ -25,6 +26,7 @@ const router = express.Router();
 // Repository instances
 const recruiterRepository = new MongoRecruiterRepository();
 const otpRepository = new MongoOtpRepository();
+const jobRepository = new MongoJobRepository()
 
 // Service instances
 const emailService = new EmailService();
@@ -35,7 +37,7 @@ const registerRecruiterUseCase = new RegisterRecruiterUseCase(recruiterRepositor
 const verifyOtpUseCase = new VerifyOtpRecruiterUseCase(otpRepository, recruiterRepository);
 const loginRecruiterUseCase = new LoginRecruiterUseCase(recruiterRepository, authService);
 const recruiterProfileUseCase = new RecruiterProfileUseCase(recruiterRepository);
-const recruiterJobUseCase = new RecruiterJobUseCase()
+const recruiterJobUseCase = new RecruiterJobUseCase(jobRepository)
 
 // Controller with injected use cases and services
 const recruiterAuthController = new RecruiterAuthController(registerRecruiterUseCase, verifyOtpUseCase, loginRecruiterUseCase, authService);
@@ -56,5 +58,10 @@ router.put('/profile', verifyAccessToken, recruiterProfileController.getProfile)
 
 // Job post routes
 router.post('/postjob', verifyAccessToken, recruiterJobController.postJob)
+router.get('/jobs', verifyAccessToken, recruiterJobController.getJob)
+// router.get('/jobs/:jobId', recruiterJobController.getJob)
+router.put('/jobs/:jobId', verifyAccessToken, recruiterJobController.changeJobStatus)
+router.get('/jobs/active', recruiterJobController.getActiveJobs);
+
 
 export default router;

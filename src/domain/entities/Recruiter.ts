@@ -7,6 +7,7 @@ export class Recruiter {
         public position?: string,
         public companyName?: string,
         public password?: string,
+        public isBlocked?: Boolean,
         public createdAt: Date = new Date()
     ) {}
 }

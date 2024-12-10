@@ -15,6 +15,10 @@ export class LoginRecruiterUseCase {
             throw new Error('Recruiter not found');
         }
 
+        if(recruiter.isBlocked) {
+            throw new Error('Recruiter not found')
+        }
+
         console.log(recruiter)
 
         const isPasswordValid = await this.authService.comparePassword(password, recruiter.password ?? '');

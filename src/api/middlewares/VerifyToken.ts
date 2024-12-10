@@ -5,31 +5,78 @@ import { createResponse } from '../../utils/CustomResponse'
 
 const authService = new AuthService()
 
-interface customRequest extends Request {
+interface CustomRequest extends Request {
     user?: any
+    
 }
 
-export const verifyAccessToken = async ( req: customRequest, res: Response, next: NextFunction): Promise<void> =>  {
+export const verifyAccessToken = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
+        // Log incoming cookies for debugging
+        console.log('Incoming Cookies:', req.cookies)
+        
+        const accessToken = req.cookies.accessToken
+        const refreshToken = req.cookies.refreshToken
 
-        console.log(req.cookies)
-        const token = req.cookies.accessToken
-
-        if(!token){
-            res.status(HttpStatus.UNAUTHORIZED).json(createResponse('error', 'Access token is missing', null))
+        // Check if access token is missing
+        if (!accessToken) {
+            // If no access token, attempt to refresh
+            if (refreshToken) {
+                await handleTokenRefresh(req, res, refreshToken)
+                return
+            }
+            
+            // No refresh token available
+            res.status(HttpStatus.UNAUTHORIZED).json(
+                createResponse('error', 'Authentication required', null)
+            )
             return
         }
 
-        const decoded = await authService.verifyAccessToken(token)
+        // Verify access token
+        const decoded = await authService.verifyAccessToken(accessToken)
+        
+        // Log decoded token for debugging
+        console.log('Decoded Token:', decoded)
 
-        console.log(decoded)
+        // Attach user to request
+        req.user = decoded.email
 
-        req.user  = decoded.email
-
-        next();
+        next()
 
     } catch (error: any) {
-        res.status(HttpStatus.UNAUTHORIZED).json(createResponse('error', 'Invalid or expired access token', null))
+        // No refresh token or refresh failed
+        res.status(HttpStatus.UNAUTHORIZED).json(
+            createResponse('error', 'Authentication required', null)
+        )
         return
     }
-} 
+}
+
+// Handle token refresh
+const handleTokenRefresh = async (req: CustomRequest, res: Response, refreshToken: string): Promise<void> => {
+    try {
+        // Attempt to refresh tokens
+        const accessToken = await authService.refreshAccessToken(refreshToken)
+
+        // Set new tokens in HTTP-only cookies
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 1 * 60 * 1000 
+        })
+
+        // Prepare response for client to retry original request
+        res.status(HttpStatus.UNAUTHORIZED).json(
+            createResponse('token_refresh', 'Token refreshed', {
+                retry: true
+            })
+        )
+    } catch (refreshError) {
+        // Refresh token is invalid or expired
+        res.status(HttpStatus.UNAUTHORIZED).json(
+            createResponse('error', 'Authentication required', null)
+        )
+    }
+}

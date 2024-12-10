@@ -39,7 +39,7 @@ export class UserAuthController {
         try {
             const { otp } = req.body;
 
-            console.log(otp,'1212')
+            console.log(otp, '1212')
 
             console.log(req.session.user)
 
@@ -153,7 +153,7 @@ export class UserAuthController {
         } catch (error: any) {
             // Improved error handling
             console.error('Error handling callback:', error);
-            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(createResponse('error', 'An error occurred during login', null));
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(createResponse('error', error.Error, null));
         }
     }
 

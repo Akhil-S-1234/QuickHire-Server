@@ -7,46 +7,48 @@ import UserModel from '../database/models/UserModel'
 export class MongoUserRepository implements UserRepository {
 
     async findByEmail(email: string): Promise<User | null> {
-        
-        const user  = await UserModel.findOne({ email })
+
+        const user = await UserModel.findOne({ email })
         return user
-        ? new User(
-            user.id?.toString() ?? '',  // Convert ID to string
-            user.firstName, 
-            user.lastName ?? '',         // Fallback for lastName
-            user.email,                  // Email is required, no fallback needed
-            user.phoneNumber ?? '',      // Fallback for phoneNumber
-            user.password ?? '',   
-            user.profilePicture ?? '',      // Fallback for password
-            user.createdAt ?? new Date() // Fallback for createdAt
-        )
-        : null;
+            ? new User(
+                user.id?.toString() ?? '',  // Convert ID to string
+                user.firstName,
+                user.lastName ?? '',         // Fallback for lastName
+                user.email,                  // Email is required, no fallback needed
+                user.phoneNumber ?? '',      // Fallback for phoneNumber
+                user.password ?? '',
+                user.profilePicture ?? '',
+                user.isBlocked ?? '',
+                user.createdAt ?? new Date() // Fallback for createdAt
+            )
+            : null;
     }
 
     async findById(userId: string): Promise<User | null> {
-        
+
         // const user  = await UserModel.findOne({ userId })
-        const user  = await UserModel.findById(userId)
+        const user = await UserModel.findById(userId)
         console.log(user)
         return user
-        ? new User(
-            user.id?.toString() ?? '',  // Convert ID to string
-            user.firstName, 
-            user.lastName ?? '',         // Fallback for lastName
-            user.email,                  // Email is required, no fallback needed
-            user.phoneNumber ?? '',      // Fallback for phoneNumber
-            user.password ?? '',   
-            user.profilePicture ?? '',      // Fallback for password
-            user.createdAt ?? new Date() // Fallback for createdAt
-        )
-        : null;
+            ? new User(
+                user.id?.toString() ?? '',  // Convert ID to string
+                user.firstName,
+                user.lastName ?? '',         // Fallback for lastName
+                user.email,                  // Email is required, no fallback needed
+                user.phoneNumber ?? '',      // Fallback for phoneNumber
+                user.password ?? '',
+                user.profilePicture ?? '',      // Fallback for password
+                user.isBlocked ?? '',
+                user.createdAt ?? new Date() // Fallback for createdAt
+            )
+            : null;
     }
 
     async save(user: User): Promise<void> {
 
         const userRecord = new UserModel(user)
         await userRecord.save();
-        
+
     }
 
     async findProfileByEmail(email: string): Promise<UserProfile | null> {
@@ -57,20 +59,20 @@ export class MongoUserRepository implements UserRepository {
         return new UserProfile(
             user.id.toString(),
             user.firstName,
-            user.lastName ?? '',           
+            user.lastName ?? '',
             user.email,
-            user.phoneNumber ?? '',        
-            user.profilePicture ?? '',     
+            user.phoneNumber ?? '',
+            user.profilePicture ?? '',
             user.isFresher,
-            user.resume ?? '',             
-            user.skills ?? [],            
-            user.experience ?? [],        
-            user.education ?? [],         
-            user.city ?? '',               
+            user.resume ?? '',
+            user.skills ?? [],
+            user.experience ?? [],
+            user.education ?? [],
+            user.city ?? '',
             user.state ?? '',
-            user.isBlocked,              
+            user.isBlocked,
             user.createdAt,
-            user.updatedAt ?? new Date()   
+            user.updatedAt ?? new Date()
         );
     }
 
@@ -80,18 +82,18 @@ export class MongoUserRepository implements UserRepository {
         return users.map(user => new UserProfile(
             user.id.toString(),
             user.firstName,
-            user.lastName ?? '',           
+            user.lastName ?? '',
             user.email,
-            user.phoneNumber ?? '',        
-            user.profilePicture ?? '',     
+            user.phoneNumber ?? '',
+            user.profilePicture ?? '',
             user.isFresher,
-            user.resume ?? '',             
-            user.skills ?? [],            
-            user.experience ?? [],        
-            user.education ?? [],         
-            user.city ?? '',               
+            user.resume ?? '',
+            user.skills ?? [],
+            user.experience ?? [],
+            user.education ?? [],
+            user.city ?? '',
             user.state ?? '',
-            user.isBlocked,              
+            user.isBlocked,
             user.createdAt,
             user.updatedAt ?? new Date()       // Fallback for phoneNumber
         ));
@@ -114,20 +116,20 @@ export class MongoUserRepository implements UserRepository {
         return new UserProfile(
             user.id.toString(),
             user.firstName,
-            user.lastName ?? '',           
+            user.lastName ?? '',
             user.email,
-            user.phoneNumber ?? '',        
-            user.profilePicture ?? '',     
+            user.phoneNumber ?? '',
+            user.profilePicture ?? '',
             user.isFresher,
-            user.resume ?? '',             
-            user.skills ?? [],            
-            user.experience ?? [],        
-            user.education ?? [],         
-            user.city ?? '',               
+            user.resume ?? '',
+            user.skills ?? [],
+            user.experience ?? [],
+            user.education ?? [],
+            user.city ?? '',
             user.state ?? '',
-            user.isBlocked,              
+            user.isBlocked,
             user.createdAt,
-            user.updatedAt ?? new Date()   
+            user.updatedAt ?? new Date()
         );
     }
 

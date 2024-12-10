@@ -8,6 +8,7 @@ import session from 'express-session'
 import cors from 'cors'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser';
+import { createLoggingMiddleware, addRequestId } from '../src/api/middlewares/logging'
 
 
 
@@ -16,7 +17,12 @@ dotenv.config()
 const app = express()
 
 app.use(cookieParser())
-app.use(morgan('dev'))
+
+// app.use(morgan('dev'))
+app.use(addRequestId)
+
+app.use(createLoggingMiddleware())
+
 app.use(cors({
   origin: 'http://localhost:3000', // Frontend origin
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow required methods

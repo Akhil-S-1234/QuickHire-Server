@@ -23,14 +23,10 @@ interface Job extends Document {
     skills: string[];
     certifications: string[];
   };
-  postedBy: Types.ObjectId; // Reference to recruiter ID
+  postedBy: string; // Reference to recruiter ID
   createdAt: Date;
   updatedAt: Date;
   isActive: Boolean; // e.g., "active", "closed"
-  approvalStatus: {
-    type: 'pending' | 'approved' | 'rejected';
-    default: 'pending';
-  };
 }
 
 // Create a Mongoose schema based on the interface
@@ -57,13 +53,11 @@ const jobSchema = new Schema<Job>(
       skills: { type: [String], required: true },
       certifications: { type: [String], required: false },
     },
-    postedBy: { type: Schema.Types.ObjectId, ref: 'Recruiter', required: true }, // Assuming a Recruiter model exists
+    // postedBy: { type: Schema.Types.ObjectId, ref: 'Recruiter', required: true }, // Assuming a Recruiter model exists
+    postedBy: { type: String, required: true }, // Assuming a Recruiter model exists
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     isActive: { type: Boolean, required: true, default: true }, // Renamed from "status" to "isActive"
-    approvalStatus: {
-      type: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
-    },
   },
   { timestamps: true }
 );

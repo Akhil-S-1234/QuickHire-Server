@@ -18,7 +18,9 @@ export class MongoRecruiterRepository implements RecruiterRepository {
                 recruiter.phone ?? '',  // Fallback for phone
                 recruiter.position ?? '',  // Fallback for position
                 recruiter.companyName ?? '',  // Fallback for companyName
-                recruiter.password ?? '',  // Fallback for password
+                recruiter.password ?? '', 
+                !!recruiter.isBlocked,            // Convert `Boolean` to `boolean`
+                // Fallback for password
                 recruiter.createdAt ?? new Date()  // Fallback for createdAt
             )
             : null;
@@ -35,7 +37,8 @@ export class MongoRecruiterRepository implements RecruiterRepository {
                 recruiter.phone ?? '',  // Fallback for phone
                 recruiter.position ?? '',  // Fallback for position
                 recruiter.companyName ?? '',  // Fallback for companyName
-                recruiter.password ?? '',  // Fallback for password
+                recruiter.password ?? '', 
+                !!recruiter.isBlocked,            // Convert `Boolean` to `boolean`
                 recruiter.createdAt ?? new Date()  // Fallback for createdAt
             )
             : null;
