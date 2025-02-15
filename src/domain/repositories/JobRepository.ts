@@ -5,4 +5,6 @@ export interface JobRepository {
     getActiveJobs(): Promise<any>;
     updateJob(jobId: string, updateData: any): Promise<any>;
     deleteJob(jobId: string): Promise<any>;
+    getJobId(jobId: string): Promise<any>;
+
 }

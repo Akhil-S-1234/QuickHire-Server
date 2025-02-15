@@ -64,7 +64,7 @@ const handleTokenRefresh = async (req: CustomRequest, res: Response, refreshToke
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 1 * 60 * 1000 
+            maxAge: 15 * 60 * 1000 
         })
 
         // Prepare response for client to retry original request

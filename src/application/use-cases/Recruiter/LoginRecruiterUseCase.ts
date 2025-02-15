@@ -15,9 +15,19 @@ export class LoginRecruiterUseCase {
             throw new Error('Recruiter not found');
         }
 
-        if(recruiter.isBlocked) {
-            throw new Error('Recruiter not found')
+        if(recruiter.accountStatus == 'pending'){
+            throw new Error('Recruiter review is pending');
         }
+
+        if(recruiter.accountStatus == 'suspended'){
+            throw new Error('Recruiter is suspended');
+        }
+
+        if(recruiter.isBlocked) {
+            throw new Error('Recruiter is blocked')
+        }
+
+        
 
         console.log(recruiter)
 

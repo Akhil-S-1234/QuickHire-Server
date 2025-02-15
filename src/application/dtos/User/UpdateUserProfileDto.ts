@@ -52,4 +52,12 @@ export type UpdateUserDTO = Partial<{
     city: string;
     state: string;
     isBlocked: Boolean;
+    subscription?: {
+        type: string;         // e.g., 'monthly', 'yearly'
+        startDate: Date;
+        endDate: Date;
+        isActive: boolean;    // indicates whether the subscription is active
+    };
+    savedJobs?: string[]; // Array of references to the Job model
+    password?: string;
 }>;

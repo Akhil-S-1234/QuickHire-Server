@@ -1,6 +1,7 @@
 import { RequestHandler, Request, Response } from 'express';
 import { RegisterUserUseCase } from '../../../application/use-cases/User/RegisterUserUseCase';
 import { VerifyOtpUseCase } from '../../../application/use-cases/User/VerifyOtpUseCase';
+import { ForgotPasswordUseCase } from '../../../application/use-cases/User/ForgotPasswordUseCase';
 import { LoginUserUseCase } from '../../../application/use-cases/User/LoginUserUseCase';
 import { RegisterUserDto } from '../../../application/dtos/User/RegisterUserDto';
 import { HttpStatus } from '../../../utils/HttpStatus';
@@ -13,6 +14,7 @@ export class UserAuthController {
         private registerUserUseCase: RegisterUserUseCase,
         private verifyOtpUseCase: VerifyOtpUseCase,
         private loginUserUseCase: LoginUserUseCase,
+        private forgotPasswordUseCase: ForgotPasswordUseCase,
         private authService: AuthService
     ) { }
 
@@ -183,6 +185,50 @@ export class UserAuthController {
             res.status(HttpStatus.OK).json(createResponse('success', 'Access token refreshed', null));
         } catch (error: any) {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(createResponse('error', 'Error refreshing token', null));
+        }
+    }
+
+    forgotPassword: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+        try {
+
+            const { email } = req.body
+
+            if (!email) {
+                res.status(HttpStatus.BAD_REQUEST).json(createResponse('error', 'Email is required', null));
+                return;
+            }
+
+            await this.forgotPasswordUseCase.sendResetLink(email)
+
+           
+            // Respond with a success message
+            res.status(HttpStatus.OK).json(createResponse('success', 'Reset link sent successfully', null));
+        } catch (error: any) {
+            // Handle any potential errors
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(createResponse('error', 'User not found', null));
+        }
+    }
+
+    resetPassword: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+        try {
+
+            const { token, password } = req.body
+
+            // if (!email) {
+            //     res.status(HttpStatus.BAD_REQUEST).json(createResponse('error', 'Email is required', null));
+            //     return;
+            // }
+
+            await this.forgotPasswordUseCase.resetPassword(token,password)
+
+           
+            // Respond with a success message
+            res.status(HttpStatus.OK).json(createResponse('success', 'Reset successfully', null));
+        } catch (error: any) {
+
+            console.log(error)
+            // Handle any potential errors
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(createResponse('error', 'Expired token resend once more', null));
         }
     }
 

@@ -5,14 +5,6 @@ import winston from 'winston';
 import { Request, Response, NextFunction } from 'express';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-declare global {
-    namespace Express {
-        interface Request {
-            id?: string;
-        }
-    }
-}
-
 export function createLoggingMiddleware() {
     const logDirectory = path.join(process.cwd(), 'logs');
 
@@ -49,8 +41,3 @@ export function createLoggingMiddleware() {
     return morganMiddleware;
 }
 
-// Middleware to add request ID
-export function addRequestId(req: Request, res: Response, next: NextFunction) {
-    req.id = Date.now().toString();
-    next();
-}

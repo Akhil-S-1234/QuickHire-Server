@@ -32,16 +32,16 @@ export class AdminAuthController {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
                     sameSite: 'strict',
-                    // maxAge: 15 * 60 * 1000, // Token expires in 15 min
-                    maxAge: 1 * 60 * 1000, // Token expires in 15 min
+                    maxAge: 15 * 60 * 1000, // Token expires in 15 min
+                    // maxAge: 1 * 60 * 1000, // Token expires in 15 min
                 });
 
                 res.cookie('refreshToken', result.refreshToken, {
                     httpOnly: true,  // Can't be accessed by JavaScript
                     secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production (HTTPS)
                     sameSite: 'strict',  // Prevents the cookie from being sent in cross-site requests
-                    // maxAge: 7 * 24 * 60 * 60 * 1000,  // Expiration time (e.g., 7 days)
-                    maxAge: 6 * 60 * 1000, // Token expires in 15 min,
+                    maxAge: 7 * 24 * 60 * 60 * 1000,  // Expiration time (e.g., 7 days)
+                    // maxAge: 6 * 60 * 1000, // Token expires in 15 min,
                 });
 
                 res.status(HttpStatus.OK).json(createResponse('success', 'Login successful', {email: email}));

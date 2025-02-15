@@ -43,6 +43,13 @@ export class UserProfile {
         public state?: string,
         public isBlocked?: Boolean,
         public createdAt?: Date,
-        public updatedAt?: Date
+        public updatedAt?: Date,
+        public subscription?: {
+            type: string;         // e.g., 'monthly', 'yearly'
+            startDate: Date;
+            endDate: Date;
+            isActive: boolean;    // indicates whether the subscription is active
+        },
+        public savedJobs?: string[],
     ) {}
 }

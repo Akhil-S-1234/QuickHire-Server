@@ -2,13 +2,14 @@ import express from 'express'
 import userRoutes from './api/routes/userRoutes'
 import recruiterRoutes from './api/routes/recruiterRoutes'
 import adminRoutes from './api/routes/adminRoutes'
+import jobRoutes from './api/routes/build'
 import { connectToDatabase } from './infrastructure/database/database'
 import dotenv from 'dotenv'
 import session from 'express-session'
 import cors from 'cors'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser';
-import { createLoggingMiddleware, addRequestId } from '../src/api/middlewares/logging'
+import { createLoggingMiddleware } from '../src/api/middlewares/logging'
 
 
 
@@ -19,7 +20,30 @@ const app = express()
 app.use(cookieParser())
 
 // app.use(morgan('dev'))
-app.use(addRequestId)
+// app.use(addRequestId)
+
+// const httpServer = createServer(app);
+// const io = new Server(httpServer, {
+//   cors: {
+//     origin: "http://localhost:3000", // Replace with your frontend URL
+//     methods: ["GET", "POST"],
+//   },
+// });
+
+// io.on("connection", (socket) => {
+//   console.log(`User connected: ${socket.id}`);
+
+//   // Listen for events
+//   socket.on("message", (data) => {
+//     console.log(`Message received: ${data}`);
+//     io.emit("message", data); // Broadcast the message
+//   });
+
+//   // Handle disconnection
+//   socket.on("disconnect", () => {
+//     console.log(`User disconnected: ${socket.id}`);
+//   });
+// });
 
 app.use(createLoggingMiddleware())
 
@@ -48,12 +72,24 @@ declare module "express-session" {
       password: string;
     };
     recruiter?: {
-      name: string;
+      firstName: string;
+      lastName: string;
       email: string;
-      phone: string;
-      position: string;
-      companyName: string;
       password: string;
+      confirmPassword: string;
+      mobile: string;
+      currentLocation: string;
+      currentCompany: string;
+      currentDesignation: string;
+      fromDate: string;
+      toDate: string;
+      addressLine1: string;
+      addressLine2: string;
+      city: string;
+      state: string;
+      country: string;
+      zipCode: string;
+      profilePicture: string;
     };
   }
 }
@@ -61,6 +97,7 @@ declare module "express-session" {
 app.use('/api/users', userRoutes)
 app.use('/api/recruiter', recruiterRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/job', jobRoutes)
 
 connectToDatabase().then(() => {
   app.listen(PORT, () => {

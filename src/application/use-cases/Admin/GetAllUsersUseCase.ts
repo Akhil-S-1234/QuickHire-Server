@@ -12,7 +12,7 @@ export class GetAllUsersUseCase {
         return this.userRepository.getAllUsers();
     }
 
-    async getRecruiters(): Promise<RecruiterProfile[]> {
-        return this.recruiterRepository.getAllRecruiters();
+    async getRecruiters(status: boolean): Promise<RecruiterProfile[]> {
+        return this.recruiterRepository.getAllRecruiters(status);
     }
 }

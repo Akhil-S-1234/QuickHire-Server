@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 // Define the schema for the job posting
 interface Job extends Document {
@@ -9,7 +9,7 @@ interface Job extends Document {
     logo: string;
   };
   location: string;
-  type: string; // e.g., "Full-time", "Part-time", "Contract"
+  type: string; //  "Full-time", "Part-time", "Contract"
   salary: {
     min: number;
     max: number;
@@ -53,11 +53,10 @@ const jobSchema = new Schema<Job>(
       skills: { type: [String], required: true },
       certifications: { type: [String], required: false },
     },
-    // postedBy: { type: Schema.Types.ObjectId, ref: 'Recruiter', required: true }, // Assuming a Recruiter model exists
-    postedBy: { type: String, required: true }, // Assuming a Recruiter model exists
+    postedBy: { type: String, required: true }, // Changed to ObjectId reference
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    isActive: { type: Boolean, required: true, default: true }, // Renamed from "status" to "isActive"
+    isActive: { type: Boolean, required: true, default: true },
   },
   { timestamps: true }
 );
@@ -65,4 +64,4 @@ const jobSchema = new Schema<Job>(
 // Create and export the model
 const JobModel = model<Job>('Job', jobSchema);
 
-export default JobModel ;
+export default JobModel;

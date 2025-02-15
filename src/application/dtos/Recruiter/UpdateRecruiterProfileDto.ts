@@ -6,6 +6,7 @@ export type UpdateRecruiterDto = Partial<{
     companyName: string;
     password: string;
     profilePicture: string;
+    accountStatus: string;
     isBlocked: Boolean;
     createdAt: Date
 }>

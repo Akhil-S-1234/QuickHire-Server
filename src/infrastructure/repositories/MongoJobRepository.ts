@@ -2,12 +2,17 @@ import { JobRepository } from '../../domain/repositories/JobRepository';
 import JobModel from '../database/models/JobModel';
 
 export class MongoJobRepository implements JobRepository {
+    
     async createJob(jobData: any): Promise<any> {
         return await JobModel.create(jobData);
     }
 
     async getJobById(email: string): Promise<any> {
         return await JobModel.find({ postedBy: email }); // Find all jobs posted by the recruiter using the postedBy field
+    }
+
+    async getJobId(jobId: string): Promise<any> {
+        return await JobModel.findById(jobId); // Find all jobs posted by the recruiter using the postedBy field
     }
 
     async getActiveJobs(): Promise<any> {

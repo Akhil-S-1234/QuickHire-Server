@@ -6,19 +6,29 @@
     "auditLog": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\.73928fb5bbb948a1ce6a14bb870f978fbcb2cfd4-audit.json",
     "files": [
         {
-            "date": 1733555375854,
-            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2024-12-07.log",
-            "hash": "1a0ccc128eb5b8b0b218a6de9cf45e59b006bd2d48cfa0028dc763807a33ed3b"
+            "date": 1738988122906,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-08.log",
+            "hash": "c5396cdc5e501f6a995cbc967ea0f64c4fcec50394064d7f6f562de9814e5aaa"
         },
         {
-            "date": 1733717577067,
-            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2024-12-09.log",
-            "hash": "1fe10ed6db9aa3a8a7f1d51fd5087521fdbeed8e7075210f0ff26a87241ef8ed"
+            "date": 1739118668794,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-09.log",
+            "hash": "72d59769438fd83a85f5f18e17d726d4297ff75c3f5c6d6571c5210fe6e3954b"
         },
         {
-            "date": 1733805829151,
-            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2024-12-10.log",
-            "hash": "cab8280253ee67535e28a5d3cc5e4046e41e9c82fb95285f4d4e7d5a2d358b3c"
+            "date": 1739125899079,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-10.log",
+            "hash": "228bbdf83e190130c7c6b398884c13f6389b321bb1818824b2d2c38aaa647a01"
+        },
+        {
+            "date": 1739333380927,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-12.log",
+            "hash": "b88a66ab26727b9ef2f5b81618ceb02d11fb02b84996e19e1b2a229f7f41e26a"
+        },
+        {
+            "date": 1739592002049,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-15.log",
+            "hash": "cb70d1309ecdcdfc8fb8223bfaed2213b3af464c079678a7af62997fa6ad3262"
         }
     ],
     "hashType": "sha256"

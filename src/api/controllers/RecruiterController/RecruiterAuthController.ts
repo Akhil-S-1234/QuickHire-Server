@@ -17,10 +17,19 @@ export class RecruiterAuthController {
 
     register: RequestHandler = async (req: Request, res: Response): Promise<void> => {
         try {
+
+            console.log(req.body)
+
+            const image = (req as Request & { Url?: string }).Url
+
+            console.log(image)
+
+
             const recruiterData: RecruiterDTO = req.body;
 
             const hashedPassword = await this.authService.hashPassword(recruiterData.password);
             recruiterData.password = hashedPassword;
+            recruiterData.profilePicture = image ? image : '';
 
             await this.registerRecruiterUseCase.execute(recruiterData.email);
 
@@ -40,6 +49,8 @@ export class RecruiterAuthController {
                 res.status(HttpStatus.BAD_REQUEST).json(createResponse('error', 'No registration data found', null));
                 return;
             }
+
+            console.log(req.session.recruiter)
 
             await this.verifyOtpUseCase.verify(otp, req.session.recruiter);
             req.session.recruiter = undefined;

@@ -1,8 +1,10 @@
 import { UserRepository } from '../../domain/repositories/UserRepository'
 import { User, UserProfile } from '../../domain/entities/User'
 import { UpdateUserDTO } from '../../application/dtos/User/UpdateUserProfileDto'
-
+import { razorpay } from '../../config/razorpay';
 import UserModel from '../database/models/UserModel'
+import crypto from 'crypto';
+
 
 export class MongoUserRepository implements UserRepository {
 
@@ -72,7 +74,14 @@ export class MongoUserRepository implements UserRepository {
             user.state ?? '',
             user.isBlocked,
             user.createdAt,
-            user.updatedAt ?? new Date()
+            user.updatedAt ?? new Date(),
+            user.subscription ? {
+                type: user.subscription.type,
+                startDate: user.subscription.startDate,
+                endDate: user.subscription.endDate,
+                isActive: user.subscription.isActive
+            } : undefined,
+            user.savedJobs?.map(job => job.toString())
         );
     }
 
@@ -95,7 +104,14 @@ export class MongoUserRepository implements UserRepository {
             user.state ?? '',
             user.isBlocked,
             user.createdAt,
-            user.updatedAt ?? new Date()       // Fallback for phoneNumber
+            user.updatedAt ?? new Date(),
+            user.subscription ? {
+                type: user.subscription.type,
+                startDate: user.subscription.startDate,
+                endDate: user.subscription.endDate,
+                isActive: user.subscription.isActive
+            } : undefined,
+            user.savedJobs?.map(job => job.toString())
         ));
     }
 
@@ -129,8 +145,73 @@ export class MongoUserRepository implements UserRepository {
             user.state ?? '',
             user.isBlocked,
             user.createdAt,
-            user.updatedAt ?? new Date()
+            user.updatedAt ?? new Date(),
+            user.subscription ? {
+                type: user.subscription.type,
+                startDate: user.subscription.startDate,
+                endDate: user.subscription.endDate,
+                isActive: user.subscription.isActive
+            } : undefined,
+            user.savedJobs?.map(job => job.toString())
         );
     }
+
+
+    async createPayment(paymentData: any): Promise<any> {
+        const order = await razorpay.orders.create(paymentData);
+        return {
+            id: order.id,
+            ...paymentData,
+        };
+    }
+
+    async verifyPayment(subscription: any, email: string): Promise<boolean> {
+        console.log(subscription, email)
+        const result = await UserModel.updateOne(
+            { email },
+            { $set: { 'subscription': subscription } }
+        );
+
+        console.log(result)
+
+        return true
+    }
+
+    async getSubscriptionDetails(email: string): Promise<any> {
+        try {
+            const user = await UserModel.findOne(
+                { email },
+                {
+                    subscription: {
+                        type: 1,
+                        startDate: 1,
+                        endDate: 1,
+                        isActive: 1,
+                    }
+                }
+            );
+
+            return user?.subscription || null; // Return only the subscription details
+        } catch (error: any) {
+            throw new Error(`Failed to fetch subscription details: ${error.message}`);
+        }
+    }
+
+    async getSavedJobs(userId: string): Promise<any> {
+        try {
+
+            const user = await UserModel.findById(userId).populate('savedJobs');
+
+            if(!user) {
+                throw new Error('User not found')
+            }
+
+            return user.savedJobs
+
+        } catch (error: any) {
+            throw new Error(`Failed to fetch saved jobs: ${error.message}`)
+        }
+    }
+
 
 }
