@@ -3,7 +3,7 @@ import express from 'express';
 import { UserAuthController } from '../controllers/UserController/UserAuthController'
 import { UserProfileController } from '../controllers/UserController/UserProfileController';
 import { UserJobController } from '../controllers/UserController/UserJobController';
-import { UserSubscriptionController  } from '../controllers/UserController/UserSubscriptionController';
+import { UserSubscriptionPlanController  } from '../controllers/UserController/UserSubscriptionPlanController';
 import { UserSavedJobsController } from '../controllers/UserController/UserSavedJobsController';
 import { UserReportedJobController } from '../controllers/UserController/UserReportedJobController';
 
@@ -13,6 +13,7 @@ import { MongoOtpRepository } from '../../infrastructure/repositories/MongoOtpRe
 import { MongoJobRepository } from '../../infrastructure/repositories/MongoJobRepository';
 import { MongoJobApplicationRepository } from '../../infrastructure/repositories/MongoJobApplicationRepository';
 import { MongoReportedJobRepository } from '../../infrastructure/repositories/MongoReportedJobRepository';
+import { MongoSubscriptionPlanRepository } from '../../infrastructure/repositories/MongoSubscriptionPlanRepository';
 
 
 import { RegisterUserUseCase } from '../../application/use-cases/User/RegisterUserUseCase';
@@ -22,7 +23,7 @@ import { UserProfileUseCase } from '../../application/use-cases/User/UserProfile
 import { CheckIfBlockedUseCase } from '../../application/use-cases/User/CheckIfBlockedUseCase'; 
 import { UserJobUseCase } from '../../application/use-cases/User/UserJobUseCase';
 import { ReportedJobUseCase } from '../../application/use-cases/User/ReportedJobUseCase';
-import { SubscriptionUseCase } from '../../application/use-cases/User/SubscriptionUseCase';
+import { SubscriptionPlanUseCase } from '../../application/use-cases/User/SubscriptionPlanUseCase';
 import { SavedJobsUseCase } from '../../application/use-cases/User/SavedJobsUseCase';
 import { ForgotPasswordUseCase } from '../../application/use-cases/User/ForgotPasswordUseCase';
 
@@ -42,6 +43,7 @@ const otpRepository = new MongoOtpRepository()
 const jobRepository = new MongoJobRepository()
 const jobApplicationRepository = new MongoJobApplicationRepository()
 const reportedJobRepository = new MongoReportedJobRepository()
+const subscriptionPlanRepository = new MongoSubscriptionPlanRepository()
 
 
 // Service instances
@@ -55,7 +57,7 @@ const loginUserUseCase = new LoginUserUseCase(userRepository, authService)
 const userProfileUseCase = new UserProfileUseCase(userRepository); 
 const checkIfBlockedUseCase = new CheckIfBlockedUseCase(userRepository)
 const userJobUseCase = new UserJobUseCase(jobRepository, userRepository, jobApplicationRepository)
-const subscriptionUseCase = new SubscriptionUseCase(userRepository)
+const subscriptionPlanUseCase = new SubscriptionPlanUseCase(userRepository, subscriptionPlanRepository)
 const savedJobsUseCase = new SavedJobsUseCase(jobRepository, userRepository)
 const forgotPasswordUseCase = new ForgotPasswordUseCase(userRepository, authService, emailService)
 const reportedJobUseCase = new ReportedJobUseCase(userRepository, jobRepository, reportedJobRepository)
@@ -65,7 +67,7 @@ const reportedJobUseCase = new ReportedJobUseCase(userRepository, jobRepository,
 const userAuthController = new UserAuthController(registerUserUseCase, verifyOtpUseCase, loginUserUseCase, forgotPasswordUseCase, authService)
 const userProfileController = new UserProfileController(userProfileUseCase);  
 const userJobController = new UserJobController(userJobUseCase)
-const userSubscriptionController  = new UserSubscriptionController(subscriptionUseCase)
+const userSubscriptionPlanController  = new UserSubscriptionPlanController(subscriptionPlanUseCase)
 const userSavedJobsController = new UserSavedJobsController(savedJobsUseCase)
 const userReportedJobController = new UserReportedJobController(reportedJobUseCase)
 
@@ -109,8 +111,11 @@ router.get('/isJobSaved/:jobId', verifyAccessToken, userSavedJobsController.isJo
 
 router.post('/reportJob', verifyAccessToken, userReportedJobController.reportJob)
 
-router.post('/create-payment', verifyAccessToken, userSubscriptionController.createPayment);
-router.post('/verify-payment', verifyAccessToken, userSubscriptionController.verifyPayment);
-router.get('/subscription-status', verifyAccessToken, userSubscriptionController.getSubscriptionStatus)
+router.post('/create-payment', verifyAccessToken, userSubscriptionPlanController.createPayment);
+router.post('/verify-payment', verifyAccessToken, userSubscriptionPlanController.verifyPayment);
+
+router.get('/subscriptions', verifyAccessToken, userSubscriptionPlanController.getSubscriptionPlans)
+router.get('/subscriptions/:subscriptionId', verifyAccessToken, userSubscriptionPlanController.getSubscriptionPlanById)
+router.get('/subscription-status', verifyAccessToken, userSubscriptionPlanController.getSubscriptionStatus)
 
 export default router

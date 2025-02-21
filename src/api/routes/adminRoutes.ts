@@ -4,14 +4,14 @@ import { Router } from 'express';
 import { AdminAuthController } from '../controllers/AdminController/AdminAuthController';
 import { AdminManageController } from '../controllers/AdminController/AdminManagementController';
 import { AdminReportedJobController } from '../controllers/AdminController/AdminReportedJobController';
-import { AdminSubscriptionController } from '../controllers/AdminController/AdminSubscriptionController';
+import { AdminSubscriptionPlanController } from '../controllers/AdminController/AdminSubscriptionPlanController';
 
 
 import { MongoAdminRepository } from '../../infrastructure/repositories/MongoAdminRepository';
 import { MongoUserRepository } from '../../infrastructure/repositories/MongoUserRepository';
 import { MongoRecruiterRepository } from '../../infrastructure/repositories/MongoRecruiterRepository';
 import { MongoReportedJobRepository } from '../../infrastructure/repositories/MongoReportedJobRepository';
-import { MongoSubscriptionRepository } from '../../infrastructure/repositories/MongoSubscriptionRepository';
+import { MongoSubscriptionPlanRepository } from '../../infrastructure/repositories/MongoSubscriptionPlanRepository';
 import { MongoJobRepository } from '../../infrastructure/repositories/MongoJobRepository';
 
 
@@ -20,7 +20,7 @@ import { LoginAdminUseCase } from '../../application/use-cases/Admin/LoginAdminU
 import { ToggleBlockUseCase } from '../../application/use-cases/Admin/ToggleBlockUseCase';
 import { VerifyRecruiterUseCase } from '../../application/use-cases/Admin/VerifyRecruiterUseCase';
 import { ReportedJobUseCase } from '../../application/use-cases/Admin/ReportedJobUseCase';
-import { SubscriptionUseCase } from '../../application/use-cases/Admin/SubscriptionUseCase';
+import { SubscriptionPlanUseCase } from '../../application/use-cases/Admin/SubscriptionPlanUseCase';
 
 import { AuthService } from '../../infrastructure/services/AuthService';
 import { EmailService } from "../../infrastructure/services/EmailService";
@@ -37,7 +37,7 @@ const adminRepository = new MongoAdminRepository();
 const userRepository = new MongoUserRepository()
 const recruiterRepository = new MongoRecruiterRepository()
 const reportedJobRepository = new MongoReportedJobRepository()
-const subscriptionRepository = new MongoSubscriptionRepository()
+const subscriptionPlanRepository = new MongoSubscriptionPlanRepository()
 const jobRepository = new MongoJobRepository()
 
 
@@ -47,12 +47,12 @@ const toggleBlockUseCase = new ToggleBlockUseCase(userRepository, recruiterRepos
 const verifyRecruiterUseCase = new VerifyRecruiterUseCase(recruiterRepository, emailService)
 const reportedJobUseCase = new ReportedJobUseCase(reportedJobRepository, jobRepository)
 const checkAdminPassword = new LoginAdminUseCase(adminRepository, authService);
-const subscriptionUseCase = new SubscriptionUseCase(subscriptionRepository)
+const subscriptionPlanUseCase = new SubscriptionPlanUseCase(subscriptionPlanRepository)
 
 const adminAuthController = new AdminAuthController(checkAdminPassword, authService);
 const adminManageController = new AdminManageController(verifyRecruiterUseCase, getAllUsersUseCase, toggleBlockUseCase)
 const adminReportedJobController = new AdminReportedJobController(reportedJobUseCase)
-const adminSubscriptionController = new AdminSubscriptionController(subscriptionUseCase)
+const adminSubscriptionPlanController = new AdminSubscriptionPlanController(subscriptionPlanUseCase)
 
 router.post('/login', adminAuthController.login);
 router.post('/logout', adminAuthController.logout);
@@ -65,8 +65,10 @@ router.put('/recruiters/:recruiterId', verifyAccessToken,adminManageController.t
 router.get('/unverified-recruiters', verifyAccessToken, adminManageController.getAllUnverifiedRecrutiers)
 router.post('/verify-recruiter/:id', verifyAccessToken, adminManageController.verifyRecruiter)
 
-router.get('/subscriptions', verifyAccessToken, adminSubscriptionController.getAllSubscriptions)
-router.put('/subscriptions/:subscriptionId', verifyAccessToken, adminSubscriptionController.updateSubscriptionPrice)
+router.post('/subscriptionPlans', verifyAccessToken, adminSubscriptionPlanController.createSubscriptionPlan)
+router.get('/subscriptionPlans', verifyAccessToken, adminSubscriptionPlanController.getAllSubscriptionPlans)
+router.delete('/subscriptionPlans/:subscriptionPlanId', verifyAccessToken, adminSubscriptionPlanController.deleteSubscriptionPlan)
+router.put('/subscriptionPlans/:subscriptionPlanId', verifyAccessToken, adminSubscriptionPlanController.updateSubscriptionPlan)
 
 router.get('/reported-jobs/:id?', verifyAccessToken, adminReportedJobController.getAllReports)
 router.post('/reported-jobs/:id/toggle-visibility', verifyAccessToken, adminReportedJobController.updateReportStatus)
