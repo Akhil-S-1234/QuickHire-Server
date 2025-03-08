@@ -18,7 +18,7 @@ export class MongoSubscriptionPlanRepository implements SubscriptionPlanReposito
     }
 
     async updateSubscriptionPlan(subscriptionPlanId: string, subscriptionPlanData: SubscriptionPlanDTO): Promise<SubscriptionPlan | null> {
-        console.log(subscriptionPlanData)
+
         const updatedSubscriptionPlan = await SubscriptionPlanModel.findOneAndUpdate(
             { _id: subscriptionPlanId }, // Use _id instead of id
             { $set: { ...subscriptionPlanData } },
@@ -66,6 +66,7 @@ export class MongoSubscriptionPlanRepository implements SubscriptionPlanReposito
                 value: feature.value
             })),
             subscriptionPlanDoc.userType,
+            subscriptionPlanDoc.razorpayPlanId,
             subscriptionPlanDoc.isActive ?? true // Default to true if undefined
         );
     }

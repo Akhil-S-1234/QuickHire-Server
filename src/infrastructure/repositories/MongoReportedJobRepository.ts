@@ -36,7 +36,7 @@ export class MongoReportedJobRepository implements ReportedJobRepository {
   }
 
   
-  async findAll(): Promise<any[]> {
+  async findAll(options?:any): Promise<any[]> {
     // try {
     //   return await ReportedJobModel.find({})
     //     .sort({ createdAt: -1 });

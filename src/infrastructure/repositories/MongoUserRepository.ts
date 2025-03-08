@@ -46,10 +46,16 @@ export class MongoUserRepository implements UserRepository {
             : null;
     }
 
-    async save(user: User): Promise<void> {
+    async save(user: User): Promise<any> {
 
         const userRecord = new UserModel(user)
-        await userRecord.save();
+        const savedUser = await userRecord.save();
+
+        return {
+            userId: savedUser.id.toString(),
+            name: savedUser.firstName,
+            email: savedUser.email,
+        }; 
 
     }
 
@@ -154,27 +160,6 @@ export class MongoUserRepository implements UserRepository {
             } : undefined,
             user.savedJobs?.map(job => job.toString())
         );
-    }
-
-
-    async createPayment(paymentData: any): Promise<any> {
-        const order = await razorpay.orders.create(paymentData);
-        return {
-            id: order.id,
-            ...paymentData,
-        };
-    }
-
-    async verifyPayment(subscription: any, email: string): Promise<boolean> {
-        console.log(subscription, email)
-        const result = await UserModel.updateOne(
-            { email },
-            { $set: { 'subscription': subscription } }
-        );
-
-        console.log(result)
-
-        return true
     }
 
     async getSubscriptionDetails(email: string): Promise<any> {

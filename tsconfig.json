@@ -18,7 +18,7 @@
       "@config/*": ["src/config/*"],
       "@utils/*": ["src/utils/*"]
     },
-    "types": ["node"],
+    "types": ["node", "express-session"],
     "typeRoots": ["./node_modules/@types", "./src/types"],
   },
   "include": [ "src/**/*", "src/types/**/*.d.ts"],

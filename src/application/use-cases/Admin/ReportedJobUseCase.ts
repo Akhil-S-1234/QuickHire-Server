@@ -13,16 +13,12 @@ export class ReportedJobUseCase {
     //     return await this.reportedJobRepository.findAll();
     // }
 
-    async getAllReports(id?: string): Promise<any[]> { 
-        let reports = await this.reportedJobRepository.findAll();
+    async getAllReports(options?: any): Promise<any[]> { 
+        let reports = await this.reportedJobRepository.findAll(options);
     
         // If id is provided, filter the reports
-        if (id) {
-            reports = reports.filter(report => report.jobId == id);
-            reports = reports[0]
-        }
+       
 
-        console.log(reports)
     
         return reports;
     }

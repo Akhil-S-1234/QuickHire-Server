@@ -86,14 +86,14 @@ export class UserAuthController {
 
             const { accessToken, refreshToken, user } = await this.loginUserUseCase.executeLogin(email, password);
 
-            res.cookie('accessToken', accessToken, {
+            res.cookie('jobSeekerAccessToken', accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
                 sameSite: 'strict',
                 maxAge: 15 * 60 * 1000, // Token expires in 15 min
             });
 
-            res.cookie('refreshToken', refreshToken, {
+            res.cookie('jobSeekerRefreshToken', refreshToken, {
                 httpOnly: true,  // Can't be accessed by JavaScript
                 secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production (HTTPS)
                 sameSite: 'strict',  // Prevents the cookie from being sent in cross-site requests
@@ -111,8 +111,8 @@ export class UserAuthController {
 
             console.log('geg')
             // Clear the access and refresh token cookies by setting them to expire
-            res.clearCookie('accessToken', { httpOnly: true, secure: true, sameSite: 'strict' });
-            res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'strict' });
+            res.clearCookie('jobSeekerAccessToken', { httpOnly: true, secure: true, sameSite: 'strict' });
+            res.clearCookie('jobSeekerRefreshToken', { httpOnly: true, secure: true, sameSite: 'strict' });
 
             // Respond with a success message
             res.status(HttpStatus.OK).json(createResponse('success', 'Logged out successfully', null));
@@ -134,23 +134,23 @@ export class UserAuthController {
             const [firstName, lastName = ''] = name.split(' ');
 
             // Call the callback handler to check if the user exists, or create a new user
-            const { accessToken, refreshToken } = await this.loginUserUseCase.executeCallback(email, firstName, lastName, image);
+            const { accessToken, refreshToken, user } = await this.loginUserUseCase.executeCallback(email, firstName, lastName, image);
 
-            res.cookie('accessToken', accessToken, {
+            res.cookie('jobSeekerAccessToken', accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
                 sameSite: 'strict',
                 maxAge: 15 * 60 * 1000, // Token expires in 15 min
             });
 
-            res.cookie('refreshToken', refreshToken, {
+            res.cookie('jobSeekerRefreshToken', refreshToken, {
                 httpOnly: true,  // Can't be accessed by JavaScript
                 secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production (HTTPS)
                 sameSite: 'strict',  // Prevents the cookie from being sent in cross-site requests
                 maxAge: 7 * 24 * 60 * 60 * 1000,  // Expiration time (e.g., 7 days)
             });
 
-            res.status(HttpStatus.OK).json(createResponse('success', 'Login successful', null));
+            res.status(HttpStatus.OK).json(createResponse('success', 'Login successful', user));
 
         } catch (error: any) {
             // Improved error handling

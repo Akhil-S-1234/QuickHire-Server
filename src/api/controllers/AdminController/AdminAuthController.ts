@@ -28,7 +28,7 @@ export class AdminAuthController {
             if (result.success) {
                 // Send response with the token and success message
 
-                res.cookie('accessToken', result.accessToken, {
+                res.cookie('adminAccessToken', result.accessToken, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
                     sameSite: 'strict',
@@ -36,7 +36,7 @@ export class AdminAuthController {
                     // maxAge: 1 * 60 * 1000, // Token expires in 15 min
                 });
 
-                res.cookie('refreshToken', result.refreshToken, {
+                res.cookie('adminRefreshToken', result.refreshToken, {
                     httpOnly: true,  // Can't be accessed by JavaScript
                     secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production (HTTPS)
                     sameSite: 'strict',  // Prevents the cookie from being sent in cross-site requests
@@ -60,8 +60,8 @@ export class AdminAuthController {
 
             console.log('Admin Logout')
             // Clear the access and refresh token cookies by setting them to expire
-            res.clearCookie('accessToken', { httpOnly: true, secure: true, sameSite: 'strict' });
-            res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'strict' });
+            res.clearCookie('adminAccessToken', { httpOnly: true, secure: true, sameSite: 'strict' });
+            res.clearCookie('adminRefreshToken', { httpOnly: true, secure: true, sameSite: 'strict' });
 
             // Respond with a success message
             res.status(HttpStatus.OK).json(createResponse('success', 'Logged out successfully', null));

@@ -7,10 +7,8 @@ export interface UserRepository {
     findById(userId : string): Promise< User | null>
     getAllUsers(): Promise<UserProfile[]>;
     findProfileByEmail(email : string): Promise< UserProfile | null>
-    save(user: User): Promise<void>
+    save(user: User): Promise<any>
     updateUserProfile(email : string, updates: UpdateUserDTO): Promise< UserProfile | null>
-    createPayment(payment: any): Promise<any>;
-    verifyPayment(subscription: any, email: string): Promise<boolean>;
     getSubscriptionDetails(email:string): Promise<any>
     getSavedJobs(userId: string): Promise<any>
 }

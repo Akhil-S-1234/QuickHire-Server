@@ -3,9 +3,10 @@ export class SubscriptionPlan {
         public id: string,
         public name: string,
         public price: number,
-        public interval: number, // Number of months
-        public features: Array<{featureId: string; name: string; value: any }>, // Accepts boolean, number, or string
+        public interval: number, 
+        public features: Array<{featureId: string; name: string; value: any }>, 
         public userType: "job_seeker" | "recruiter",
-        public isActive: boolean = true // Default is true
+        public razorpayPlanId: string, 
+        public isActive: boolean = true 
     ) {}
 }

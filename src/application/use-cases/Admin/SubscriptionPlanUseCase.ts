@@ -1,27 +1,67 @@
 // GetSubscriptionsUseCase.ts
 import { SubscriptionPlanRepository } from '../../../domain/repositories/SubscriptionPlanRepository';
+import { RazorpayRepository } from '../../../domain/repositories/RazorpayRepository';
 import { SubscriptionPlan } from '../../../domain/entities/SubscriptionPlan';
 import { SubscriptionPlanDTO } from '../../dtos/Admin/SubscriptionPlanDto'
 
 export class SubscriptionPlanUseCase {
-    constructor(private subscriptionPlanRepository: SubscriptionPlanRepository) {}
+    constructor(
+        private subscriptionPlanRepository: SubscriptionPlanRepository,
+        private razorpayRepository: RazorpayRepository
+    ) {}
 
     async execute(userType?: string): Promise<SubscriptionPlan[]> {
         return await this.subscriptionPlanRepository.getAllSubscriptionPlans(userType);
-    }
-
-    async update(subscriptionPlanId: string, subscriptionPlanData: SubscriptionPlanDTO): Promise<SubscriptionPlan | null> {
-
-        this.validateSubscriptionPlanData(subscriptionPlanData);
-        await this.checkDuplicateSubscriptionPlan(subscriptionPlanData, subscriptionPlanId); 
-        return await this.subscriptionPlanRepository.updateSubscriptionPlan(subscriptionPlanId, subscriptionPlanData);
     }
 
     async create(subscriptionPlanData: SubscriptionPlanDTO  ): Promise<SubscriptionPlan | null> {
 
         this.validateSubscriptionPlanData(subscriptionPlanData);
         await this.checkDuplicateSubscriptionPlan(subscriptionPlanData); 
-        return await this.subscriptionPlanRepository.createSubscriptionPlan(subscriptionPlanData);
+
+        const razorpayPlan = await this.razorpayRepository.createSubscriptionPlan({
+            name: subscriptionPlanData.name,
+            price: subscriptionPlanData.price,
+            interval: subscriptionPlanData.interval,
+            description: subscriptionPlanData.features.map(f => f.name).join(', ')
+        });
+
+        const enrichedPlanData = {
+            ...subscriptionPlanData,
+            razorpayPlanId: razorpayPlan.id
+        };
+
+        return await this.subscriptionPlanRepository.createSubscriptionPlan(enrichedPlanData);
+    }
+
+    async update(subscriptionPlanId: string, subscriptionPlanData: SubscriptionPlanDTO): Promise<SubscriptionPlan | null> {
+
+        const existingPlan = await this.subscriptionPlanRepository.getSubscriptionPlanById(subscriptionPlanId);
+        
+        if (!existingPlan) {
+            throw new Error('Subscription plan not found');
+        }
+
+        this.validateSubscriptionPlanData(subscriptionPlanData);
+        await this.checkDuplicateSubscriptionPlan(subscriptionPlanData, subscriptionPlanId); 
+
+        const razorpayPlan = await this.razorpayRepository.updateSubscriptionPlan(
+            existingPlan.razorpayPlanId,
+            {
+                name: subscriptionPlanData.name,
+                price: subscriptionPlanData.price,
+                interval: subscriptionPlanData.interval,
+                description: subscriptionPlanData.features.map(f => f.name).join(', ')
+            }
+        );
+
+        // Update plan data with new Razorpay plan ID
+        const enrichedPlanData = {
+            ...subscriptionPlanData,
+            razorpayPlanId: razorpayPlan.id,
+        };
+        
+        return await this.subscriptionPlanRepository.updateSubscriptionPlan(subscriptionPlanId, enrichedPlanData);
     }
 
     async delete(subscriptionPlanId: string): Promise<boolean> {

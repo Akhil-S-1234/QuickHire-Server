@@ -36,8 +36,8 @@ export class LoginRecruiterUseCase {
             throw new Error('Invalid password');
         }
 
-        const accessToken = await this.authService.generateAccessToken({ email: recruiter.email });
-        const refreshToken = await this.authService.generateRefreshToken({ email: recruiter.email });
+        const accessToken = await this.authService.generateAccessToken({ email: recruiter.email, role: 'recruiter' });
+        const refreshToken = await this.authService.generateRefreshToken({ email: recruiter.email, role: 'recruiter' });
 
         const { password: _, ...recruiterData } = recruiter;
 

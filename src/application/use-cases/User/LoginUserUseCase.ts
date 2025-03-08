@@ -24,8 +24,8 @@ export class LoginUserUseCase {
             throw new Error('Invalid password');
         }
 
-        const accessToken = await this.authService.generateAccessToken({email: user.email})
-        const refreshToken = await this.authService.generateRefreshToken({email: user.email})
+        const accessToken = await this.authService.generateAccessToken({email: user.email, role: 'jobSeeker'})
+        const refreshToken = await this.authService.generateRefreshToken({email: user.email, role: 'jobSeeker'})
 
         const { password: _, ...userData } = user
 
@@ -34,9 +34,9 @@ export class LoginUserUseCase {
 
     }
 
-    async executeCallback( email: string, firstName: string, lastName: string, profilePicture: string): Promise<{ accessToken: string, refreshToken: string}> {
+    async executeCallback( email: string, firstName: string, lastName: string, profilePicture: string): Promise<{ accessToken: string, refreshToken: string, user: any}> {
 
-        const user = await this.userRepository.findByEmail(email)
+        let  user = await this.userRepository.findByEmail(email)
 
         if (!user) {
 
@@ -50,7 +50,7 @@ export class LoginUserUseCase {
                 profilePicture
             )
 
-            await this.userRepository.save(newUser)
+            user = await this.userRepository.save(newUser)
 
         }
 
@@ -58,11 +58,11 @@ export class LoginUserUseCase {
             throw new Error('User is restricted')
         }
 
-        const accessToken = await this.authService.generateAccessToken({email: email})
-        const refreshToken = await this.authService.generateRefreshToken({email: email})
+        const accessToken = await this.authService.generateAccessToken({email: email, role: 'jobSeeker'})
+        const refreshToken = await this.authService.generateRefreshToken({email: email, role: 'jobSeeker'})
 
 
-        return {accessToken, refreshToken};
+        return {accessToken, refreshToken, user};
     }
 
     async refreshTokens(refreshToken: string): Promise<{ accessToken: string }> {

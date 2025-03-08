@@ -6,28 +6,32 @@ import { ReportedJobUseCase } from '../../../application/use-cases/Admin/Reporte
 export class AdminReportedJobController {
     constructor(
         private reportedJobUseCase: ReportedJobUseCase
-    ) {}
+    ) { }
 
     getAllReports: RequestHandler = async (req: Request, res: Response): Promise<void> => {
         try {
             const { id } = req.params;
-    
+            // Extract pagination and filter parameters
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const search = req.query.search as string || '';
+            const status = req.query.status as string || 'all';
+            const reportType = req.query.reportType as string || 'all';
+
+            const paginationOptions = {
+                page,
+                limit,
+                search,
+                status,
+                reportType
+            };
+
             let reports;
-    
-            if (id) {
-                // Fetch a specific report by ID
-                reports = await this.reportedJobUseCase.getAllReports(id);
-                if (!reports) {
-                     res.status(HttpStatus.NOT_FOUND).json(
-                        createResponse('error', 'Report not found', null)
-                    );
-                    return
-                }
-            } else {
-                // Fetch all reports
-                reports = await this.reportedJobUseCase.getAllReports();
-            }
-    
+
+            // Fetch all reports
+            reports = await this.reportedJobUseCase.getAllReports(paginationOptions);
+
+
             res.status(HttpStatus.OK).json(
                 createResponse('success', 'Reports retrieved successfully', reports)
             );
@@ -43,7 +47,7 @@ export class AdminReportedJobController {
             const { id } = req.params;
             const { isActive } = req.body;
 
-            console.log(id, )
+            console.log(id,)
 
             if (!id) {
                 res.status(HttpStatus.BAD_REQUEST).json(

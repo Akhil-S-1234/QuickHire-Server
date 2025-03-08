@@ -6,34 +6,39 @@
     "auditLog": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\.73928fb5bbb948a1ce6a14bb870f978fbcb2cfd4-audit.json",
     "files": [
         {
-            "date": 1739592002049,
-            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-15.log",
-            "hash": "cb70d1309ecdcdfc8fb8223bfaed2213b3af464c079678a7af62997fa6ad3262"
+            "date": 1740802630925,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-03-01.log",
+            "hash": "2cc97a9550562015a1955ca8c63da84f19874721577523f13109c8c06398b5cc"
         },
         {
-            "date": 1739763205285,
-            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-17.log",
-            "hash": "22bf82c5e0a16713c45d5d20ae099fd69f297d3c6a84946db44b994423d17061"
+            "date": 1740975693117,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-03-03.log",
+            "hash": "cb1917a65cdf7473e6abaeecff4ddc8a05da17a516fcd1eb61db1295aebc6e25"
         },
         {
-            "date": 1739852604012,
-            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-18.log",
-            "hash": "243a041d806c0452e1d594e8d64ebe80240d9687e9d3c87c216bc89d350aae99"
+            "date": 1741060423553,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-03-04.log",
+            "hash": "0f95d92ee162f0a4b63add1a709adf277ca31560f4e4002403aec67247950927"
         },
         {
-            "date": 1739940027297,
-            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-19.log",
-            "hash": "eec00815b79784b9b5a4661e6a64e4b5e6b43bc440783c4cd59c32a9b71d046c"
+            "date": 1741178542028,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-03-05.log",
+            "hash": "b1c692fb5a6254c491e0ca165e3d70861657520cc38e95a9385b3c43283927de"
         },
         {
-            "date": 1740024493294,
-            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-20.log",
-            "hash": "d9a0de33bcaf2a2be0b4e70e4bf0fa402cc26e30011cb224c18f82d22ea9057b"
+            "date": 1741236106338,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-03-06.log",
+            "hash": "a566758fcbcbe795baf48b445f8204450e0321214c24435223bd2243d91c074f"
         },
         {
-            "date": 1740110059487,
-            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-02-21.log",
-            "hash": "6b312dcb0c35366255351e17933df771dfff3d31f42f1c07882011154e54f9cb"
+            "date": 1741332177069,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-03-07.log",
+            "hash": "6f37414626f1ff24c02253400395996686fd5adc070cfcb51d5a441bf2711075"
+        },
+        {
+            "date": 1741404372631,
+            "name": "C:\\Users\\akhil\\OneDrive\\Desktop\\QuickHire\\Server\\logs\\combined-2025-03-08.log",
+            "hash": "41eac33b5a5598f8081402d2b39e16bb5148c211d950269242cc86794ccf7404"
         }
     ],
     "hashType": "sha256"

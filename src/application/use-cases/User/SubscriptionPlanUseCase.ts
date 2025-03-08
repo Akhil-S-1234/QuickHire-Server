@@ -11,32 +11,7 @@ export class SubscriptionPlanUseCase {
         private subscriptionPlanRepository: SubscriptionPlanRepository
     ) { }
 
-    async verifyPayment(type: any, email: any): Promise<boolean> {
-
-        const startDate = new Date();
-
-        let endDate: Date;
-        if (type === 'monthly') {
-            endDate = moment(startDate).add(1, 'months').toDate();  
-        } else if (type === 'yearly') {
-            endDate = moment(startDate).add(1, 'years').toDate();  
-        } else {
-            throw new Error('Invalid subscription type');
-        }
-
-        const subscription = {
-            type: type,
-            startDate: startDate,
-            endDate: endDate,
-            isActive: true
-        };
-
-        return this.userRepository.verifyPayment(subscription, email);
-    }
-
-    async createPayment(paymentData: any): Promise<any> {
-        return this.userRepository.createPayment(paymentData);
-    }
+    
 
     async getSubscriptionDetails(email: string): Promise<any> {
         return this.userRepository.getSubscriptionDetails(email)

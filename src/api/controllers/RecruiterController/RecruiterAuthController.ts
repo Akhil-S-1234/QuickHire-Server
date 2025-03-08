@@ -89,14 +89,14 @@ export class RecruiterAuthController {
 
             const { accessToken, refreshToken, recruiter } = await this.loginRecruiterUseCase.executeLogin(email, password);
 
-            res.cookie('accessToken', accessToken, {
+            res.cookie('recruiterAccessToken', accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
                 maxAge: 15 * 60 * 1000,
             });
 
-            res.cookie('refreshToken', refreshToken, {
+            res.cookie('recruiterRefreshToken', refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
@@ -111,8 +111,8 @@ export class RecruiterAuthController {
 
     logout: RequestHandler = async (req: Request, res: Response): Promise<void> => {
         try {
-            res.clearCookie('accessToken', { httpOnly: true, secure: true, sameSite: 'strict' });
-            res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'strict' });
+            res.clearCookie('recruiterAccessToken', { httpOnly: true, secure: true, sameSite: 'strict' });
+            res.clearCookie('recruiterRefreshToken', { httpOnly: true, secure: true, sameSite: 'strict' });
 
             res.status(HttpStatus.OK).json(createResponse('success', 'Logged out successfully', null));
         } catch (error) {

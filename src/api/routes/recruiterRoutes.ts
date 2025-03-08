@@ -22,9 +22,14 @@ import { ScheduleInterviewUseCase } from '../../application/use-cases/Recruiter/
 import { EmailService } from '../../infrastructure/services/EmailService';
 import { AuthService } from '../../infrastructure/services/AuthService';
 
+import { authorize } from '../middlewares/authorize';
 import { verifyAccessToken } from '../middlewares/VerifyToken';
 import uploadToS3, { upload } from '../middlewares/uploadToS3'; // Import multer and uploadToS3
-import JobApplicationModel from '@infrastructure/database/models/JobApplicationModel';
+
+const RECRUITER_ROLE = 'recruiter'
+
+const recruiterAuth = [verifyAccessToken(RECRUITER_ROLE), authorize(RECRUITER_ROLE)]
+
 
 const router = express.Router();
 
@@ -58,24 +63,22 @@ router.post('/register', upload.single('photo'), uploadToS3, recruiterAuthContro
 router.post('/verify-otp', recruiterAuthController.verifyOtp);
 router.get('/resend-otp', recruiterAuthController.resendOtp);
 router.post('/login', recruiterAuthController.login);
-router.post('/logout', verifyAccessToken, recruiterAuthController.logout);
+router.post('/logout', ...recruiterAuth, recruiterAuthController.logout);
 router.get('/refreshtoken', recruiterAuthController.refreshToken);
 
 // Recruiter profile routes
-router.get('/profile', verifyAccessToken, recruiterProfileController.getProfile)
-router.put('/profile', verifyAccessToken, recruiterProfileController.getProfile)
+router.get('/profile', ...recruiterAuth, recruiterProfileController.getProfile)
+router.put('/profile', ...recruiterAuth, recruiterProfileController.getProfile)
 
 // Job post routes
-router.post('/postjob', verifyAccessToken, recruiterJobController.postJob)
-router.get('/jobs', verifyAccessToken, recruiterJobController.getJob)
-router.put('/jobs/:jobId', verifyAccessToken, recruiterJobController.changeJobStatus)
+router.post('/postjob', ...recruiterAuth, recruiterJobController.postJob)
+router.get('/jobs', ...recruiterAuth, recruiterJobController.getJob)
+router.put('/jobs/:jobId', ...recruiterAuth, recruiterJobController.changeJobStatus)
 // router.get('/jobs/active', recruiterJobController.getActiveJobs);
 // router.get('/job/:jobId', recruiterJobController.getJobDetails)
-router.get('/jobs/applications/:jobId', verifyAccessToken, recruiterJobController.getJobApplications)
-router.put('/jobs/applications/:applicantId', verifyAccessToken, recruiterJobController.changeApplicantStatus)
+router.get('/jobs/applications/:jobId', ...recruiterAuth, recruiterJobController.getJobApplications)
+router.put('/jobs/applications/:applicantId', ...recruiterAuth, recruiterJobController.changeApplicantStatus)
 
-router.post('/scheduleInterview', verifyAccessToken, recruiterInterviewController.scheduleInterview)
-
-
+router.post('/scheduleInterview', ...recruiterAuth, recruiterInterviewController.scheduleInterview)
 
 export default router;

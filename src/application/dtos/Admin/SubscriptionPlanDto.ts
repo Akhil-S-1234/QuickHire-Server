@@ -9,5 +9,6 @@ export interface SubscriptionPlanDTO {
     price: number;
     interval: number;
     userType: 'recruiter' | 'jobSeeker' | 'admin'; // Adjust as per allowed user types
+    razorpayPlanId?: string;
     features: FeatureDTO[];
 }
